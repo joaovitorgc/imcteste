@@ -1,27 +1,28 @@
 from flask import Flask, render_template, request
-
 app = Flask(__name__)
+
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return render_template("index.html")
+@app.route("/calculo", methods=['POST'])
+def calculadora():
+    resultado = ""
+    numero1 = int(request.form['numero1'])
+    numero2 = int(request.form['numero2'])
+    operacao = str(request.form['operacao'])
 
-@app.route('/calcular_imc', methods=['POST'])
-def calcular_imc():
-    altura = float(request.form['altura'])
-    peso = float(request.form['peso'])
+    if operacao == '+':
+        resultado = numero1 +  numero2
+    elif operacao == '-':
+        resultado = numero1 - numero2
+    elif operacao == '*':
+        resultado = numero1 * numero2
+    elif operacao == '/':
+        resultado = numero1/numero2
 
-    imc = round(peso / (altura ** 2), 2)
-
-    if imc < 18.5:
-        diagnostico = 'Abaixo do peso'
-    elif imc < 24.9:
-        diagnostico = "Peso Normal"
-    elif imc < 29.9:
-        diagnostico = 'Acima do peso'
-    else:
-        diagnostico = 'Obeso'
-
-    return render_template('index.html', imc = imc, diagnostico = diagnostico)
+    return render_template('index.html', resultado=resultado)
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
